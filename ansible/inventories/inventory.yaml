@@ -1,0 +1,13 @@
+control_planes:
+  hosts:
+    vm01:
+      ansible_host: 192.168.60.10
+      ansible_ssh_private_key_file: ../.vagrant/machines/vm01/virtualbox/private_key
+workers:
+  hosts:
+    vm02:
+      ansible_host: 192.168.60.11
+      ansible_ssh_private_key_file: ../.vagrant/machines/vm02/virtualbox/private_key
+    vm03:
+      ansible_host: 192.168.60.12
+      ansible_ssh_private_key_file: ../.vagrant/machines/vm03/virtualbox/private_key

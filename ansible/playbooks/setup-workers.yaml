@@ -1,0 +1,42 @@
+---
+- name: setup workers
+  become: true
+  hosts: workers
+  tasks:
+    - name: get install file
+      get_url:
+        url: https://get.rke2.io
+        dest: /tmp/rke2.sh
+        mode: 0755
+
+    - name: install rke2 worker
+      shell: INSTALL_RKE2_TYPE="agent" && /tmp/rke2.sh
+
+    - name: enable rke2 service
+      systemd:
+        name: rke2-agent
+        enabled: true
+    - name: create rke2 dir
+      file:
+        path: /etc/rancher/rke2
+        state: directory
+        recurse: true
+        owner: root
+        group: root
+    - name: copy config to created dir
+      template:
+        src: ../templates/config.yaml.j2
+        dest: /etc/rancher/rke2/config.yaml
+        owner: root
+        group: root
+        mode: 0644
+    - name: start rke2 service
+      systemd:
+        name: rke2-agent
+        state: started
+    - name: remove files
+      file:
+        path: /tmp/rke2.sh
+        state: absent
+
+

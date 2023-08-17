@@ -1,0 +1,51 @@
+---
+- name: Setup rke
+  hosts: control_planes
+  become: true
+  tasks:
+    - name: get installer
+      get_url:
+        url: https://get.rke2.io
+        dest: /tmp/rke2.sh
+        mode: 0755
+
+    - name: install rke2
+      shell: /tmp/rke2.sh
+
+    - name: create rke2 dir
+      file:
+        path: /etc/rancher/rke2
+        state: directory
+        recurse: true
+        owner: root
+        group: root
+
+    - name: copy config.yaml
+      template:
+        src: ../templates/config-server.yaml.j2
+        dest: /etc/rancher/rke2/config.yaml
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: enable rke2 service
+      systemd:
+        name: rke2-server
+        enabled: true
+        state: started
+    - name: copy kubectl to bin
+      copy:
+        src: "/var/lib/rancher/rke2/bin/{{ item }}"
+        remote_src: true
+        dest: /usr/bin
+        owner: root
+        group: root
+        mode: '0755'
+      loop:
+        - kubectl
+        - crictl
+        - ctr
+    - name: cleanup files
+      file:
+        path: /tmp/rke2.sh
+        state: absent
