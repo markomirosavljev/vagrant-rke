@@ -1,0 +1,28 @@
+- name: Check if RKE2 has been installed
+  stat:
+    path: /usr/local/lib/systemd/system/rke2-agent.service
+  register: rke2_agent
+
+- name: Install RKE2
+  shell: curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
+  when: not rke2_agent.stat.exists
+
+- name: Enable RKE2 service
+  systemd:
+    name: rke2-agent
+    enabled: true
+
+- name: Create RKE2 config dir
+  file:
+    path: /etc/rancher/rke2
+    state: directory
+
+- name: Copy RKE2 config to created dir
+  template:
+    src: config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+
+- name: start rke2 service
+  systemd:
+    name: rke2-agent
+    state: started

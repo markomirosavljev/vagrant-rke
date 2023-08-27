@@ -1,0 +1,4 @@
+server: https://{{ hostvars[groups['controlplanes'][0]]['ansible_host'] }}:9345
+token: {{ hostvars[groups['controlplanes'][0]]['node_token'].stdout }}
+node-name: {{ inventory_hostname }}
+node-ip: {{ ansible_host }}

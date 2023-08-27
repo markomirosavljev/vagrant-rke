@@ -1,0 +1,5 @@
+---
+- name: Setup cert-manager
+  hosts: controlplanes
+  roles:
+    - cert-manager-setup

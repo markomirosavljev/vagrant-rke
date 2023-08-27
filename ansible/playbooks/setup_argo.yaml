@@ -1,0 +1,5 @@
+---
+- name: Setup ArgoCD Server
+  hosts: controlplanes
+  roles:
+    - argocd-setup

@@ -8,23 +8,14 @@
 servers = [
   {
     :hostname => "vm01",
-    :box => "hashicorp/bionic64",
-    :ram => 4096,
-    :cpu => 2,
     :ip => "192.168.60.10"
   },
   {
     :hostname => "vm02",
-    :box => "hashicorp/bionic64",
-    :ram => 4096,
-    :cpu => 2,
     :ip => "192.168.60.11"
   },
   {
     :hostname => "vm03",
-    :box => "hashicorp/bionic64",
-    :ram => 4096,
-    :cpu => 2,
     :ip => "192.168.60.12"
   }
 ]
@@ -32,12 +23,12 @@ servers = [
 Vagrant.configure("2") do |config|
   servers.each do |machine|
     config.vm.define machine[:hostname] do |node|
-      node.vm.box = machine[:box]
+      node.vm.box = "hashicorp/bionic64"
       node.vm.hostname = machine[:hostname]
       node.vm.network "private_network", ip: machine[:ip]
       node.vm.provider "virtualbox" do |vb|
-        vb.memory = machine[:ram]
-        vb.cpus = machine[:cpu]
+        vb.memory = 4096
+        vb.cpus = 2
       end
     end
   end

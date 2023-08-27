@@ -1,11 +1,11 @@
 ---
 - name: Setup Control Planes
-  hosts: control-planes
+  hosts: controlplanes
   become: true
   roles:
-    - control_planes
+    - control-plane-setup
 - name: Setup Workers
   hosts: workers
   become: true
   roles:
-    - workers
+    - worker-setup

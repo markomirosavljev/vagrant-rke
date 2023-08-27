@@ -1,0 +1,13 @@
+---
+- name: clone argo repository
+  git:
+    repo: https://github.com/argoproj/argo-helm.git
+    dest: /home/vagrant/argo-helm
+- name: install argo helm chart
+  kubernetes.core.helm:
+    name: argocd
+    chart_ref: /home/vagrant/argo-helm/charts/argo-cd
+    dependency_update: true
+    release_namespace: argocd
+    create_namespace: true
+    release_values: "{{ lookup('template', 'argocd.yaml') | from_yaml }}"
